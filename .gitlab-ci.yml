@@ -14,3 +14,24 @@ build-test:
   artifacts:
     paths:
       - "."
+
+# build-release:
+#   stage: build
+#   tags:
+#     - "my-runner"
+#   script:
+#     - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
+#     - export ARTIFACT_NAME="$CI_PROJECT_NAME"-"$CI_BUILD_REF_NAME"-"$CI_COMMIT".tar.gz
+#     - touch $CI_PROJECT_NAME-$CI_BUILD_REF_NAME-$CI_COMMIT
+#     - composer install --no-dev
+#     - npm install
+#     - npm run production
+#     - rm -rf node_modules
+#     - cd ..
+#     - tar -zc $CI_PROJECT_NAME/ -f artifacts.tar.gz
+#     - cp artifacts.tar.gz $CI_PROJECT_NAME/
+#     - mv artifacts.tar.gz /tmp/$ARTIFACT_NAME
+#     - ansible-playbook $CI_PROJECT_NAME/ansible/upload_artifacts.yml -e target_host=localhost -e artifact_name=$ARTIFACT_NAME
+#   artifacts:
+#     paths:
+#       - "artifacts.tar.gz"
