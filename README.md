@@ -25,4 +25,12 @@
     * Set VM
     * Set gitlab-runner
 
-3. Testing Github
+3. Set envs
+    * stg_domain_name = 127.0.0.1
+    * stg_host_ip = 127.0.0.1
+    * stg_user_user = vagrant
+    * stg_user_pass = vagrant
+    * prod_domain_name = 127.0.0.1
+    * prod_host_ip = 127.0.0.1
+    * prod_user_user = vagrant
+    * prod_user_pass = vagrant
