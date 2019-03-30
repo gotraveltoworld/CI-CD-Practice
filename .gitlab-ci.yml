@@ -24,9 +24,9 @@ build-release:
     - export ARTIFACT_NAME="$CI_PROJECT_NAME"-"$CI_BUILD_REF_NAME"-"$CI_COMMIT".tar.gz
     - touch $CI_PROJECT_NAME-$CI_BUILD_REF_NAME-$CI_COMMIT
     - composer install --no-dev
-    - npm install
-    - npm run production
-    - rm -rf node_modules
+    # - npm install
+    # - npm run production
+    # - rm -rf node_modules
     - cd ..
     - tar -zc $CI_PROJECT_NAME/ -f artifacts.tar.gz
     - cp artifacts.tar.gz $CI_PROJECT_NAME/
