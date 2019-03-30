@@ -1,0 +1,16 @@
+stages:
+  - build
+build-test:
+  stage: build
+  tags:
+    - "my-runner"
+  script:
+    - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
+    - touch $CI_PROJECT_NAME-$CI_BUILD_REF_NAME-$CI_COMMIT
+    - composer install -o
+    - npm install
+    - npm run dev
+    - rm -rf node_modules
+  artifacts:
+    paths:
+      - "."
