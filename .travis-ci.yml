@@ -1,0 +1,20 @@
+sudo: false
+dist: xenial
+
+stages:
+- build
+- test
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - composer install
+        - npm install
+        - ls
+    - stage: test
+      script:
+        - composer install
+        - composer run-script post-root-package-install
+        - composer run-script post-create-project-cmd
+        - php vendor/bin/phpunit -c phpunit.xml --coverage-text --colors=never
