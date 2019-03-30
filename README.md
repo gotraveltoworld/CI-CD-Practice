@@ -24,3 +24,5 @@
 2. Virtual Box:
     * Set VM
     * Set gitlab-runner
+
+3. Testing Github
