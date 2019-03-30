@@ -1,0 +1,50 @@
+---
+
+- name: auto-deploy
+  hosts: "{{ target_host }}"
+  gather_facts: no
+  become: yes
+
+  pre_tasks:
+    - set_fact:
+        ansible_host: "{{ host_ip }}"
+        ansible_ssh_pass: "{{ user_pass }}"
+
+  tasks:
+    - name: Create Folder
+      file:
+        path: "/home/gitlab-runner/deploy/{{ target_host }}"
+        state: directory
+
+    - name: Upload and unarchive artifacts
+      unarchive:
+        src: "/tmp/artifacts.tar.gz"
+        dest: "/home/gitlab-runner/deploy/{{ target_host }}"
+        backup: yes
+        group: root
+        owner: root
+
+    - name: "composer run-script {{ item }}"
+      composer:
+        command: run-script
+        arguments: "{{ item }}"
+        working_dir: "/home/gitlab-runner/deploy/{{ target_host }}/{{ CI_PROJECT_NAME }}"
+      with_items:
+        - post-root-package-install
+        - post-create-project-cmd
+
+    - name: Replace nginx site config
+      template:
+        src: templates/website.j2
+        dest: /etc/nginx/website
+        backup: yes
+        group: root
+        owner: root
+
+    - name: Restagt php7.0-fpm
+      service:
+        name: "{{ item }}"
+        state: restarted
+      with_items:
+        - php7.0-fpm
+        - nginx
