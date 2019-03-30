@@ -2,8 +2,8 @@ sudo: false
 dist: xenial
 
 stages:
-- build
-- test
+  - build
+  - test
 
 jobs:
   include:

@@ -1,10 +1,16 @@
 stages:
   - build
   - unit-test
+  - stg-deploy
+  - stg-test
+  - prod-deploy
+  - automation
 build-test:
   stage: build
   tags:
     - "my-runner"
+  only:
+    - master
   script:
     - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
     - touch $CI_PROJECT_NAME-$CI_BUILD_REF_NAME-$CI_COMMIT
@@ -20,6 +26,8 @@ build-release:
   stage: build
   tags:
     - "my-runner"
+  only:
+    - master
   script:
     - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
     - export ARTIFACT_NAME="$CI_PROJECT_NAME"-"$CI_BUILD_REF_NAME"-"$CI_COMMIT".tar.gz
@@ -41,9 +49,62 @@ phpunit:
   stage: unit-test
   tags:
     - "my-runner"
+  only:
+    - master
   script:
     - composer run-script post-root-package-install
     - composer run-script post-create-project-cmd
     - php vendor/bin/phpunit -c phpunit.xml --coverage-text --colors=never
   dependencies:
     - build-test
+
+stg-deploy:
+  stage: stg-deploy
+  tags:
+    - "my-runner"
+  only:
+    - master
+  script:
+    - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
+    - mv artifacts.tar.gz /tmp/artifacts.tar.gz
+    - ansible-playbook ansible/auto-deploy.yml -i ansible/inventory/demo -e target_host=stg -e host_ip=$stg_host_ip -e user_pass=$stg_user_pass -e CI_PROJECT_NAME=$CI_PROJECT_NAME
+  dependencies:
+    - build-release
+  environment:
+    name: staging
+    url: http://$stg_domain_name
+
+
+test:
+  stage: stg-test
+  tags:
+    - "my-runner"
+  only:
+    - master
+  script:
+    - curl http://$stg_domain_name
+
+
+prod-deploy:
+  stage: prod-deploy
+  tags:
+    - "my-runner"
+  only:
+    - master
+  script:
+    - export CI_COMMIT=$(echo $CI_BUILD_REF | cut -b 1-6)
+    - mv artifacts.tar.gz /tmp/artifacts.tar.gz
+    - ansible-playbook ansible/auto-deploy.yml -i ansible/inventory/demo -e target_host=prod -e host_ip=$prod_host_ip -e user_pass=$prod_user_pass -e CI_PROJECT_NAME=$CI_PROJECT_NAME
+    - curl http://$prod_domain_name
+  dependencies:
+    - build-release
+  environment:
+    name: production
+    url: http://$prod_domain_name
+  when: manual
+
+close-project:
+  stage: automation
+  script:
+    - echo "do something like rm -rf .* ?"
+  when: manual
