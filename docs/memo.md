@@ -2,14 +2,36 @@
 ## 【DevOps學程[ CI/CD 實作工作坊](https://broadmission.kktix.cc/events/5218a5a3)】學習資訊共筆系統 ##
 
 ### March 30 2019 ###
+請注意，投影片老師已經再度更新，請再次下載
+另外，請加入 [廣宣學堂 CI/CD 實作工作坊（2019/3/30）社團](https://www.facebook.com/groups/848292552168820/?ref=search) 有問題可以直接問老師喔!
 
 ### A. 教材
 - 課前作業: 歡迎先練習與思考，請見[文件](http://bit.ly/2Fzl1NY)最末頁
-- [投影片](https://drive.google.com/file/d/1qijSz1sYMi8RLB20Db9q7QBYEi0yPaDu/view?usp=sharing)(已上架)
-- [code](https://drive.google.com/file/d/1QT4gYYraTXiPI8dw3j4in96-azB9QPYO/view?usp=sharing)下載
+- [投影片](https://drive.google.com/file/d/1qijSz1sYMi8RLB20Db9q7QBYEi0yPaDu/view?usp=sharing)**更新版**請再次下載
+- [實作工作坊](https://drive.google.com/file/d/1QT4gYYraTXiPI8dw3j4in96-azB9QPYO/view?usp=sharing)下載
+- [範例 PHP zip](https://www.dropbox.com/s/mqapakoo42z93kt/demo.zip)
+
 
 ### B. 共筆 (歡迎一同筆記, Markdown)
+- [Artifacts Manangement](https://rickhw.github.io/2018/07/08/DevOps/Artifacts-Management/)
+- Gitlab Token 位置
+  ![Imgur](https://i.imgur.com/cxPrWMO.png)
+- 自建 ansible host 設定 /etc/ansible/hosts
+  mkdir -p /etc/ansible
+  vim /etc/ansible/hosts
 
+  ```
+  [workshop:vars]
+  ansible_port=22
+  ansible_user=vagrant
+  ansible_host=127.0.0.1
+  ansible_ssh_pass=vagrant
+  ansible_become_pass=vagrant
+
+  [workshop]
+  localhost
+  ```
+-
 ### C. 事先安裝事項 (亦可參考[文件](http://bit.ly/2Fzl1NY))
 
 - 註冊 gitlab.com / github.com 帳號
@@ -81,5 +103,3 @@
     本線上課，一步步從入門開始並針對核心技術做講解，試著學習 Python 的專案開發，不但讓您競爭力大幅提升、也取得了程式設計的基礎工具能力。
 
     10名特別限額，請參考。 優惠碼: COURSEOFFER 額滿為止
-# Welcome to 廣宣學堂 [BroadMission.org](https://www.facebook.com/broadmission) #
-## 【DevOps學程[ CI/CD 實作工作坊](https://broadmission.kktix.cc/events/5218a5a3)】學習資訊共筆系統 ##
